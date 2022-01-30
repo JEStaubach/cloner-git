@@ -1,15 +1,21 @@
-import { Path, RetBool, RetPath, RetString, RetVal, } from 'src/types';
+import { execFile } from 'child_process';
+import { ExecResult, Path } from 'src/types';
 import mock from 'src/mock';
 
-function use(library: any): any {
+async function git(args: string[], cwd?: Path): Promise<ExecResult> {
+  return new Promise((resolve) => {
+    execFile(`git`, [...args], { cwd }, (error, stdout, stderr) => {
+      resolve({ error, stdout, stderr });
+    });
+  });
+}
 
-  function doSomething(): void {
-    library.doSomething();
-  }  
-
-  return {
-    doSomething,
+function use(
+  cloneLibrary: (_: string[], __?: Path) => Promise<ExecResult>,
+): (_args: string[], _cwd?: Path) => Promise<ExecResult> {
+  return async function cloner(args: string[], cwd?: Path): Promise<ExecResult> {
+    return cloneLibrary(args, cwd);
   };
 }
 
-export default { use, default: mock /*TODO: change*/, mock };
+export default { use, default: git, mock: mock.mock, mockError: mock.mockError };

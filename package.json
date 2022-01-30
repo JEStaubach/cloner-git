@@ -1,16 +1,16 @@
 {
-  "name": "@jestaubach/ts-lib-template",
+  "name": "@jestaubach/cloner-git",
   "version": "0.1.0",
   "description": "typescript library template",
   "keywords": [],
-  "homepage": "https://github.com/JEStaubach/ts-lib-template",
+  "homepage": "https://github.com/JEStaubach/cloner-git",
   "bugs": {
-    "url": "https://github.com/JEStaubach/ts-lib-template/issues",
+    "url": "https://github.com/JEStaubach/cloner-git/issues",
     "email": "contact@jsdevtools.com"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/JEStaubach/ts-lib-template.git"
+    "url": "https://github.com/JEStaubach/cloner-git.git"
   },
   "contributors": [
     {
@@ -20,7 +20,7 @@
     }
   ],
   "license": "MIT",
-  "private": true,
+  "private": false,
   "main": "dist/src/index.js",
   "types": "dist/src/index.d.ts",
   "files": [

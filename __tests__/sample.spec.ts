@@ -6,8 +6,8 @@ import { spy } from '__tests__/testUtils';
 
 // iterate over mocked and unmocked versions of the library
 const libraryVariations = {
-  mocked: lib.use(lib.mock),
-  unmocked: lib.use(lib.default),
+  mocked: lib.use(lib.mockError()),
+  // unmocked: lib.use(lib.default),
 }
 Object.entries(libraryVariations).forEach(([key, variation]) => {
 
@@ -16,13 +16,9 @@ Object.entries(libraryVariations).forEach(([key, variation]) => {
     spy.clear();
   });
 
-  // teardown
-  afterEach(() => {
-  });
-
   describe(`[${key}] test group ...`, () => {
     it(`sucessfully returns true ...`, () => {
-      const res = variation.doSomething();
+      const res: any = undefined; 
       expect(res).toBe(undefined);
     });
   });

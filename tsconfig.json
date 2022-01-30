@@ -18,7 +18,7 @@
   },
   "include": [
     "**/*.ts", "node_modules/@types"
-  ],
+, "src/index.ts.bak"  ],
   "exclude": [
     "node_modules", "__mocks__/**/*.ts", "dist"
   ],
