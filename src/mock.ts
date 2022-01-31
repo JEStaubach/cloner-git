@@ -1,9 +1,8 @@
 import { ExecFileException } from 'child_process';
 import { ExecResult, Path, FsHelpers } from 'src/types';
-import {jest} from '@jest/globals';
 
 function mock(fsHelpers: FsHelpers) {
-  return jest.fn().mockImplementation(async (args: string[], cwd?: Path): Promise<ExecResult> => {
+  return (async (args: string[], cwd?: Path): Promise<ExecResult> => {
     // eslint-disable-next-line @typescript-eslint/no-var-requires
     const pathLocal = require(`path`);
     const fullDest = fsHelpers.getAbsolutePath(cwd || args.slice(-1)[0]).value;
@@ -28,7 +27,7 @@ function mock(fsHelpers: FsHelpers) {
 // Mock running a cli command and recieving an error
 // useful for actions like `git clone`, etc...
 function mockError() {
-  return jest.fn().mockImplementation(async (_args: string[], _cwd?: Path): Promise<ExecResult> => {
+  return (async (_args: string[], _cwd?: Path): Promise<ExecResult> => {
     return Promise.resolve({
       error: { name: ``, message: `oops!`, code: -1 } as ExecFileException,
       stdout: ``,
