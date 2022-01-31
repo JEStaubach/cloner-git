@@ -1,5 +1,6 @@
 import { ExecFileException } from 'child_process';
 import { ExecResult, Path, FsHelpers } from 'src/types';
+import {jest} from '@jest/globals';
 
 function mock(fsHelpers: FsHelpers) {
   return jest.fn().mockImplementation(async (args: string[], cwd?: Path): Promise<ExecResult> => {
