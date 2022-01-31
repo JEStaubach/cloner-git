@@ -1,19 +1,20 @@
 import { ExecFileException } from 'child_process';
 import { ExecResult, Path, FsHelpers } from 'src/types';
-import path from 'path';
 
 function mock(fsHelpers: FsHelpers) {
   return jest.fn().mockImplementation(async (args: string[], cwd?: Path): Promise<ExecResult> => {
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    const pathLocal = require(`path`);
     const fullDest = fsHelpers.getAbsolutePath(cwd || args.slice(-1)[0]).value;
     const usePath: string =
       args.filter((cur: string) => {
         return cur === `sparse-checkout`;
       }).length > 0
-        ? path.resolve(fsHelpers.getAbsolutePath(fullDest).value, args.slice(-1)[0].slice(1))
+        ? pathLocal.resolve(fsHelpers.getAbsolutePath(fullDest).value, args.slice(-1)[0].slice(1))
         : fullDest;
     if (!fsHelpers.checkIfDirExists(usePath).value) {
       fsHelpers.createDir(fsHelpers.getAbsolutePath(usePath).value);
-      fsHelpers.touchFile(`${usePath}${path.sep}main.tf`);
+      fsHelpers.touchFile(`${usePath}${pathLocal.sep}main.tf`);
     }
     return Promise.resolve({
       error: null,
