@@ -13,7 +13,7 @@ type FsHelpers = {
 }
 
 type ExecResult = {
-  error?: ExecFileException;
+  error?: ExecFileException | null;
   stdout?: string;
   stderr?: string;
 };
@@ -37,7 +37,7 @@ interface RetPath extends RetVal {
   value?: Path;
 }
 
-export {
+export type {
   Path,
   RetBool,
   RetString,

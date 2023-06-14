@@ -1,6 +1,6 @@
 import { execFile } from 'child_process';
-import { ExecResult, Path } from 'src/types';
-import mock from 'src/mock';
+import { ExecResult, Path } from './types';
+import mock from './mock';
 
 async function git(args: string[], cwd?: Path): Promise<ExecResult> {
   return new Promise((resolve) => {
