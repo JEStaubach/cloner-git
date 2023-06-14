@@ -1,1 +1,1 @@
-# ts-lib-template
+# cloner-git

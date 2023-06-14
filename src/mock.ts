@@ -1,5 +1,5 @@
 import { ExecFileException } from 'child_process';
-import { ExecResult, Path, FsHelpers } from 'src/types';
+import { ExecResult, Path, FsHelpers } from './types';
 
 function mock(fsHelpers: FsHelpers) {
   return (async (args: string[], cwd?: Path): Promise<ExecResult> => {
@@ -12,9 +12,13 @@ function mock(fsHelpers: FsHelpers) {
       }).length > 0
         ? pathLocal.resolve(fsHelpers.getAbsolutePath(fullDest).value, args.slice(-1)[0].slice(1))
         : fullDest;
-    if (!fsHelpers.checkIfDirExists(usePath).value) {
-      fsHelpers.createDir(fsHelpers.getAbsolutePath(usePath).value);
-      fsHelpers.touchFile(`${usePath}${pathLocal.sep}main.tf`);
+    if (args[0] !== `clone` || args.filter((cur: string) => {
+      return cur === `--sparse`;
+    }).length === 0) {
+      //if (!fsHelpers.checkIfDirExists(usePath).value) {
+        fsHelpers.createDir(fsHelpers.getAbsolutePath(usePath).value);
+        fsHelpers.touchFile(`${usePath}${pathLocal.sep}main.tf`);
+      //}
     }
     return Promise.resolve({
       error: null,

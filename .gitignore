@@ -103,8 +103,5 @@ dist
 # TernJS port file
 .tern-port
 
-# test output root
+# fs-helpers test output root
 .testDir/
-
-# debug file
-debug.log
