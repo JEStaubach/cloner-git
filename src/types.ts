@@ -13,7 +13,7 @@ type FsHelpers = {
 }
 
 type ExecResult = {
-  error?: ExecFileException | null;
+  error?: ExecFileException;
   stdout?: string;
   stderr?: string;
 };
