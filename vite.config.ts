@@ -37,7 +37,7 @@ export default defineConfig({
     */
   },
   optimizeDeps: {
-    exclude: externals,
+    exclude: externals as string[],
   },
   plugins: [dts(), commonjsExternals({
     externals,
