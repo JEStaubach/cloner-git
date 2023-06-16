@@ -25,16 +25,6 @@ export default defineConfig({
       name: 'cloner-git',
       fileName: 'cloner-git',
     },
-    /*
-    rollupOptions: {
-      external: ['child_process'],
-      output: {
-        globals: {
-          child_process: 'child_process',
-        },
-      },
-    }
-    */
   },
   optimizeDeps: {
     exclude: externals as string[],
