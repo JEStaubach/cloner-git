@@ -45,7 +45,7 @@ for (const [key2, status] of Object.entries(libraryVariations)) {
         it(`clone something with sparse-checkout`, async () => {
           let { error, stdout, stderr } = await variation([`clone`, `--depth`, `1`, `--no-checkout`, `--branch`, `v2.78.0`, `https://github.com/terraform-aws-modules/terraform-aws-vpc.git`, `${rootTestDir}`]);
           expect(error).toBe(null);
-          ({ error, stdout, stderr } = await variation([`sparse-checkout`, `set`, `/examples/simple-vpc`], `${rootTestDir}`));
+          ({ error, stdout, stderr } = await variation([`sparse-checkout`, `set`, `examples/simple-vpc`], `${rootTestDir}`));
           expect(error).toBe(null);
         });
 
