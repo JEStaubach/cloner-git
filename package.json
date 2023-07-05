@@ -30,7 +30,7 @@
   ],
   "scripts": {
     "build": "tsc && vite build",
-    "test": "vitest run --coverage"
+    "test": "vitest run --single-thread --coverage"
   },
   "dependencies": {
     "@jestaubach/fs-helpers": "^0.2.16"
