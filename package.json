@@ -37,7 +37,7 @@
   },
   "devDependencies": {
     "@types/lodash": "^4.14.195",
-    "@vitest/coverage-istanbul": "^0.33.0",
+    "@vitest/coverage-istanbul": "^0.34.4",
     "builtin-modules": "^3.3.0",
     "lodash": "^4.17.21",
     "typescript": "^5.1.6",
