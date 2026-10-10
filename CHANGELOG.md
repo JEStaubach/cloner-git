@@ -15,8 +15,6 @@
 * **ci:** repair Snyk policy and report handling ([694ac49](https://github.com/JEStaubach/cloner-git/commit/694ac494e1ff02fd1f3640ba317791b1a84c7f19))
 * **types:** harden clone result and path handling ([3a42c4c](https://github.com/JEStaubach/cloner-git/commit/3a42c4ca021162552d688e982b07b14e134796da))
 
-## Changelog
-
 All notable changes to this project are documented here.
 
 This changelog follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
