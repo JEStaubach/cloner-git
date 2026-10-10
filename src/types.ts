@@ -1,16 +1,16 @@
-import { ExecFileException } from 'node:child_process';
+import { ExecFileException } from "node:child_process";
 
 type FsHelpers = {
-  getAbsolutePath: (_:string) => RetPath,
-  checkIfFileExists: (_:string) => RetBool,
-  checkIfDirExists: (_:string) => RetBool,
-  createDir: (_:string) => RetPath,
-  renameDir: (_:string, __:string) => RetVal,
-  rimrafDir: (_:string) => RetVal,
-  readFile: (_:string) => RetString,
-  copyDirAbs: (_:string, __:string) => RetVal,
-  touchFile: (_:string) => RetVal,
-}
+  getAbsolutePath: (_: string) => RetPath;
+  checkIfFileExists: (_: string) => RetBool;
+  checkIfDirExists: (_: string) => RetBool;
+  createDir: (_: string) => RetPath;
+  renameDir: (_: string, __: string) => RetVal;
+  rimrafDir: (_: string) => RetVal;
+  readFile: (_: string) => RetString;
+  copyDirAbs: (_: string, __: string) => RetVal;
+  touchFile: (_: string) => RetVal;
+};
 
 type ExecResult = {
   error?: ExecFileException | null;
@@ -35,11 +35,4 @@ interface RetPath extends RetVal {
   value?: string;
 }
 
-export type {
-  RetBool,
-  RetString,
-  RetVal,
-  RetPath,
-  ExecResult,
-  FsHelpers,
-};
+export type { RetBool, RetString, RetVal, RetPath, ExecResult, FsHelpers };
