@@ -1,4 +1,4 @@
-import { ExecFileException } from 'child_process';
+import { ExecFileException } from 'node:child_process';
 
 type FsHelpers = {
   getAbsolutePath: (_:string) => RetPath,
@@ -13,12 +13,10 @@ type FsHelpers = {
 }
 
 type ExecResult = {
-  error?: ExecFileException;
+  error?: ExecFileException | null;
   stdout?: string;
   stderr?: string;
 };
-
-type Path = string;
 
 type RetVal = {
   success: boolean;
@@ -34,11 +32,10 @@ interface RetBool extends RetVal {
 }
 
 interface RetPath extends RetVal {
-  value?: Path;
+  value?: string;
 }
 
 export type {
-  Path,
   RetBool,
   RetString,
   RetVal,
