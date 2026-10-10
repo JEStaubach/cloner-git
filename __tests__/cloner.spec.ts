@@ -1,6 +1,8 @@
 import lib from '../src/index';
+import mockLibrary from '../src/mock';
 import fsHelpers from '@jestaubach/fs-helpers';
 import { ExecResult } from '../src/types';
+import type { FsHelpers } from '../src/types';
 import { beforeAll, afterAll, beforeEach, describe, it, expect, vi, afterEach } from 'vitest';
 
 const fsh = fsHelpers.use(fsHelpers.default);
@@ -33,6 +35,39 @@ beforeEach( () => {
 // teardown
 afterAll(async () => {
   await fsh.rimrafDirs(rootTestDirs);
+});
+
+describe(`mock input validation`, () => {
+  it(`rejects a missing destination`, async () => {
+    const getAbsolutePath = vi.fn();
+    const mockFsHelpers = { getAbsolutePath } as unknown as FsHelpers;
+
+    await expect(mockLibrary.mock(mockFsHelpers)([])).rejects.toThrow(
+      `A destination path is required`,
+    );
+    expect(getAbsolutePath).not.toHaveBeenCalled();
+  });
+
+  it(`rejects an unresolved destination`, async () => {
+    const getAbsolutePath = vi.fn().mockReturnValue({ success: true });
+    const mockFsHelpers = { getAbsolutePath } as unknown as FsHelpers;
+
+    await expect(mockLibrary.mock(mockFsHelpers)([`clone`, `source`])).rejects.toThrow(
+      `Could not resolve destination path 'source'`,
+    );
+  });
+
+  it(`rejects an unresolved mock path`, async () => {
+    const getAbsolutePath = vi.fn()
+      .mockReturnValueOnce({ success: true, value: `resolved-destination` })
+      .mockReturnValueOnce({ success: true });
+    const mockFsHelpers = { getAbsolutePath } as unknown as FsHelpers;
+
+    await expect(mockLibrary.mock(mockFsHelpers)([`clone`, `source`, `destination`])).rejects.toThrow(
+      `Could not resolve mock path 'resolved-destination'`,
+    );
+    expect(getAbsolutePath).toHaveBeenCalledTimes(2);
+  });
 });
 
 
