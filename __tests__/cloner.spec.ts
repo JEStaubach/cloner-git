@@ -1,7 +1,18 @@
-import lib from '../src/index';
-import fsHelpers from '@jestaubach/fs-helpers';
-import { ExecResult } from '../src/types';
-import { beforeAll, afterAll, beforeEach, describe, it, expect, vi, afterEach } from 'vitest';
+import lib from "../src/index";
+import mockLibrary from "../src/mock";
+import fsHelpers from "@jestaubach/fs-helpers";
+import { ExecResult } from "../src/types";
+import type { FsHelpers } from "../src/types";
+import {
+  beforeAll,
+  afterAll,
+  beforeEach,
+  describe,
+  it,
+  expect,
+  vi,
+  afterEach,
+} from "vitest";
 
 const fsh = fsHelpers.use(fsHelpers.default);
 
@@ -15,64 +26,119 @@ const libraryVariations = {
     unmocked: lib.use(lib.default),
   },
   success: {
-    mocked: lib.use(lib.mock(fsh) as (_:string[],__?:string) => Promise<ExecResult>),
+    mocked: lib.use(
+      lib.mock(fsh) as (_: string[], __?: string) => Promise<ExecResult>,
+    ),
     unmocked: lib.use(lib.default),
   },
-}
+};
 
 // setup
 beforeAll(async () => {
   await fsh.rimrafDirs(rootTestDirs);
 });
 
-beforeEach( () => {
+beforeEach(() => {
   vi.resetAllMocks();
 });
-
 
 // teardown
 afterAll(async () => {
   await fsh.rimrafDirs(rootTestDirs);
 });
 
+describe(`mock input validation`, () => {
+  it(`rejects a missing destination`, async () => {
+    const getAbsolutePath = vi.fn();
+    const mockFsHelpers = { getAbsolutePath } as unknown as FsHelpers;
+
+    await expect(mockLibrary.mock(mockFsHelpers)([])).rejects.toThrow(
+      `A destination path is required`,
+    );
+    expect(getAbsolutePath).not.toHaveBeenCalled();
+  });
+
+  it(`rejects an unresolved destination`, async () => {
+    const getAbsolutePath = vi.fn().mockReturnValue({ success: true });
+    const mockFsHelpers = { getAbsolutePath } as unknown as FsHelpers;
+
+    await expect(
+      mockLibrary.mock(mockFsHelpers)([`clone`, `source`]),
+    ).rejects.toThrow(`Could not resolve destination path 'source'`);
+  });
+
+  it(`rejects an unresolved mock path`, async () => {
+    const getAbsolutePath = vi
+      .fn()
+      .mockReturnValueOnce({ success: true, value: `resolved-destination` })
+      .mockReturnValueOnce({ success: true });
+    const mockFsHelpers = { getAbsolutePath } as unknown as FsHelpers;
+
+    await expect(
+      mockLibrary.mock(mockFsHelpers)([`clone`, `source`, `destination`]),
+    ).rejects.toThrow(`Could not resolve mock path 'resolved-destination'`);
+    expect(getAbsolutePath).toHaveBeenCalledTimes(2);
+  });
+});
 
 for (const [key2, status] of Object.entries(libraryVariations)) {
-
   for (const [key, variation] of Object.entries(status)) {
     if (key2 === `success`) {
-      
       describe(`[${key}] success group ...`, async () => {
-
         it(`clone something successfully`, async () => {
-          const { error, stdout, stderr } = await variation([`clone`, `https://github.com/terraform-aws-modules/terraform-aws-vpc.git`, `${rootTestDirs[0]}/${key2}/${key}`]);
+          const { error, stdout, stderr } = await variation([
+            `clone`,
+            `https://github.com/terraform-aws-modules/terraform-aws-vpc.git`,
+            `${rootTestDirs[0]}/${key2}/${key}`,
+          ]);
           expect(error).toBe(null);
         }, 30000);
 
         it(`clone something with sparse-checkout`, async () => {
-          let { error, stdout, stderr } = await variation([`clone`, `--depth`, `1`, `--no-checkout`, `--branch`, `v2.78.0`, `https://github.com/terraform-aws-modules/terraform-aws-vpc.git`, `${rootTestDirs[1]}/${key2}/${key}`]);
+          let { error, stdout, stderr } = await variation([
+            `clone`,
+            `--depth`,
+            `1`,
+            `--no-checkout`,
+            `--branch`,
+            `v2.78.0`,
+            `https://github.com/terraform-aws-modules/terraform-aws-vpc.git`,
+            `${rootTestDirs[1]}/${key2}/${key}`,
+          ]);
           expect(error).toBe(null);
-          ({ error, stdout, stderr } = await variation([`sparse-checkout`, `set`, `--no-cone`, `examples/simple-vpc`], `${rootTestDirs[1]}/${key2}/${key}`));
+          ({ error, stdout, stderr } = await variation(
+            [`sparse-checkout`, `set`, `--no-cone`, `examples/simple-vpc`],
+            `${rootTestDirs[1]}/${key2}/${key}`,
+          ));
           expect(error).toBe(null);
-          ({ error, stdout, stderr } = await variation([`checkout`, `@`], `${rootTestDirs[1]}/${key2}/${key}`));
+          ({ error, stdout, stderr } = await variation(
+            [`checkout`, `@`],
+            `${rootTestDirs[1]}/${key2}/${key}`,
+          ));
           expect(error).toBe(null);
         });
 
         it(`clone something to an existing dir`, async () => {
           fsh.createDir(`${rootTestDirs[2]}/${key2}/${key}`);
-          const { error, stdout, stderr } = await variation([`clone`, `https://github.com/terraform-aws-modules/terraform-aws-vpc.git`, `${rootTestDirs[2]}/${key2}/${key}`]);
+          const { error, stdout, stderr } = await variation([
+            `clone`,
+            `https://github.com/terraform-aws-modules/terraform-aws-vpc.git`,
+            `${rootTestDirs[2]}/${key2}/${key}`,
+          ]);
           expect(error).toBe(null);
         }, 30000);
-
       });
     } else {
       describe(`[${key}] error group ...`, async () => {
-
         it(`clone something unsuccessfully`, async () => {
-          const {error, stdout, stderr} = await variation([`cloneErr`, `https://github.com/terraform-aws-modules/terraform-aws-vpc.git`, `${rootTestDirs[3]}/${key2}/${key}`]);
+          const { error, stdout, stderr } = await variation([
+            `cloneErr`,
+            `https://github.com/terraform-aws-modules/terraform-aws-vpc.git`,
+            `${rootTestDirs[3]}/${key2}/${key}`,
+          ]);
           expect(error).not.toBe(null);
         }, 30000);
-
       });
     }
   }
-};
+}

@@ -1,27 +1,32 @@
 #!/usr/bin/env sh
-. "$(dirname -- "$0")/_/husky.sh"
+set -eu
 
-# Check if detect-secrets is installed
-if ! command -v detect-secrets &> /dev/null
-then
-    echo "Warning: detect-secrets is not installed."
-    echo "!!! detect-secrets will not be run."
-    exit 0
-fi
-# Check if pyahocorasick is installed (word-list)
-if ! python -c "import ahocorasick" &> /dev/null
-then
-    echo "Warning: pyahocorasick is not installed."
-    echo "!!! detect-secrets will not be run."
-    exit 0
+if ! command -v detect-secrets >/dev/null 2>&1; then
+    echo "Error: required system command 'detect-secrets' is not installed." >&2
+    exit 1
 fi
 
-# if there is no baseline, create one
-if [ ! -e .secrets.baseline ]; then
-    echo "Creating baseline..."
-    detect-secrets scan --no-verify --word-list wordlist.txt > .secrets.baseline
+WORDLIST_ARG=""
+if [ -f wordlist.txt ] && [ -s wordlist.txt ]; then
+    if ! command -v python >/dev/null 2>&1 || ! python -c "import ahocorasick" >/dev/null 2>&1; then
+        echo "Error: wordlist.txt requires Python and pyahocorasick." >&2
+        echo "Install it with: python -m pip install pyahocorasick" >&2
+        exit 1
+    fi
+    WORDLIST_ARG="--word-list wordlist.txt"
 fi
 
-echo "Running detect-secrets on commit-msg..."
-# Scans the commit message.
-detect-secrets scan --no-verify --word-list wordlist.txt --string "$@" > /dev/null
+if [ -n "$WORDLIST_ARG" ]; then
+    scan_output=$(detect-secrets scan --no-verify $WORDLIST_ARG --string "$(cat "$1")")
+else
+    scan_output=$(detect-secrets scan --no-verify --string "$(cat "$1")")
+fi
+
+matches=$(printf '%s\n' "$scan_output" | grep -E ':[[:space:]]*True([[:space:]]+\([^)]*\))?[[:space:]]*$' || true)
+if [ -n "$matches" ]; then
+    echo "Suspected secret in commit message:" >&2
+    printf '%s\n' "$matches" >&2
+    exit 1
+fi
+
+npx --no-install commitlint --edit "$1"

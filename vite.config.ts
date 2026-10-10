@@ -1,43 +1,48 @@
 /// <reference types="vitest" />
 
-import { resolve } from 'path';
-import { defineConfig } from 'vite';
-import lodash from 'lodash';
-import dts from 'vite-plugin-dts';
-import builtinModules from 'builtin-modules';
-import pkg from './package.json';
-import commonjsExternals from 'vite-plugin-commonjs-externals';
+import { resolve } from "node:path";
+import { defineConfig } from "vitest/config";
+import dts from "unplugin-dts/vite";
+import builtinModules from "builtin-modules";
+import pkg from "./package.json";
 
-const { escapeRegExp } = lodash;
-
-const externals = [
-  'child_process', 
+const dependencyNames = Object.keys(pkg.dependencies);
+const externalNames = [
+  "child_process",
   ...builtinModules,
-  ...Object.keys(pkg.dependencies).map(
-    name => new RegExp('^' + escapeRegExp(name) + '(\\/.+)?$')
-  )
+  ...builtinModules.map((module) => `node:${module}`),
+  ...dependencyNames,
 ];
+const isExternal = (id: string) =>
+  externalNames.includes(id) ||
+  dependencyNames.some((name) => id.startsWith(`${name}/`));
 
 export default defineConfig({
   build: {
     lib: {
-      entry: resolve(__dirname, 'src/index.ts'),
-      name: 'cloner-git',
-      fileName: 'cloner-git',
+      entry: resolve(import.meta.dirname, "src/index.ts"),
+      name: "cloner-git",
+      fileName: "cloner-git",
+    },
+    rolldownOptions: {
+      external: isExternal,
+      output: {
+        banner: `if (typeof module !== 'undefined' && module.exports && typeof process !== 'undefined' && typeof process.emitWarning === 'function') { process.emitWarning('@jestaubach/cloner-git: The CommonJS/UMD entry is deprecated; migrate to the ESM entry.', { code: 'DEP_CLONER_GIT_CJS', type: 'DeprecationWarning' }); }`,
+      },
     },
   },
   optimizeDeps: {
-    exclude: externals as string[],
+    exclude: externalNames,
   },
-  plugins: [dts(), commonjsExternals({
-    externals,
-  })],
+  plugins: [dts()],
   test: {
     coverage: {
-      provider: 'istanbul',
-      reporter: [`text`, `json`, `html`, `lcov`]
+      provider: "istanbul",
+      reporter: [`text`, `json`, `html`, `lcov`],
+      include: ["src"],
+      exclude: ["src/**/*.d.ts", "src/**/__tests__/**"],
     },
-    environment: 'node',
-    testTimeout: 20000
+    environment: "node",
+    testTimeout: 20000,
   },
 });
