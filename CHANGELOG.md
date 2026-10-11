@@ -1,7 +1,12 @@
 # Changelog
 
-## [0.2.0](https://github.com/JEStaubach/cloner-git/compare/cloner-git-v0.1.14...cloner-git-v0.2.0) (2026-10-10)
+## [0.2.1](https://github.com/JEStaubach/cloner-git/compare/cloner-git-v0.2.0...cloner-git-v0.2.1) (2026-10-11)
 
+### Bug Fixes
+
+* **deps:** require @jestaubach/fs-helpers ^0.2.32 ([#41](https://github.com/JEStaubach/cloner-git/issues/41)) ([e026ecf](https://github.com/JEStaubach/cloner-git/commit/e026ecf746b1c369274cdde12bff6fcaa84dc433))
+
+## [0.2.0](https://github.com/JEStaubach/cloner-git/compare/cloner-git-v0.1.14...cloner-git-v0.2.0) (2026-10-10)
 ### ⚠ BREAKING CHANGES
 
 * **types:** harden clone result and path handling

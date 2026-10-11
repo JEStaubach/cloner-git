@@ -1,6 +1,6 @@
 {
   "name": "@jestaubach/cloner-git",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "typescript library template",
   "keywords": [],
   "homepage": "https://github.com/JEStaubach/cloner-git",
@@ -46,7 +46,7 @@
     "prepare": "husky"
   },
   "dependencies": {
-    "@jestaubach/fs-helpers": "^0.2.31"
+    "@jestaubach/fs-helpers": "^0.2.32"
   },
   "devDependencies": {
     "@commitlint/cli": "^21.2.3",
