@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.2](https://github.com/JEStaubach/cloner-git/compare/cloner-git-v0.2.1...cloner-git-v0.2.2) (2026-10-11)
+
+
+### Bug Fixes
+
+* **mock:** use ESM path imports ([#50](https://github.com/JEStaubach/cloner-git/issues/50)) ([6a92a04](https://github.com/JEStaubach/cloner-git/commit/6a92a042ca871d8d345eba01707f2c466a667229))
+
 ## [0.2.1](https://github.com/JEStaubach/cloner-git/compare/cloner-git-v0.2.0...cloner-git-v0.2.1) (2026-10-11)
 
 ### Bug Fixes
