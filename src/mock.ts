@@ -1,10 +1,10 @@
 import { ExecFileException } from "node:child_process";
+import { resolve as resolvePath, sep } from "node:path";
 import { ExecResult, FsHelpers } from "./types";
 
 function mock(fsHelpers: FsHelpers) {
   return (args: string[], cwd?: string): Promise<ExecResult> =>
     new Promise((resolve) => {
-      const pathLocal = require(`path`);
       const destination = cwd ?? args.at(-1);
       if (destination === undefined) {
         throw new Error(`A destination path is required`);
@@ -16,7 +16,7 @@ function mock(fsHelpers: FsHelpers) {
       const lastArgument = args.at(-1);
       const usePath: string =
         lastArgument !== undefined && args.includes(`sparse-checkout`)
-          ? pathLocal.resolve(fullDest, lastArgument.slice(1))
+          ? resolvePath(fullDest, lastArgument.slice(1))
           : fullDest;
       if (
         args[0] !== `clone` ||
@@ -30,7 +30,7 @@ function mock(fsHelpers: FsHelpers) {
           throw new Error(`Could not resolve mock path '${usePath}'`);
         }
         fsHelpers.createDir(absoluteUsePath);
-        fsHelpers.touchFile(`${usePath}${pathLocal.sep}main.tf`);
+        fsHelpers.touchFile(`${usePath}${sep}main.tf`);
         //}
       }
       resolve({
