@@ -43,8 +43,8 @@ function mock(fsHelpers: FsHelpers) {
 
 // Mock running a cli command and recieving an error
 // useful for actions like `git clone`, etc...
-function mockError() {
-  return (_args: string[], _cwd?: string): Promise<ExecResult> => {
+function mockError(): (_args: string[], _cwd?: string) => Promise<ExecResult> {
+  return (): Promise<ExecResult> => {
     return Promise.resolve({
       error: { name: ``, message: `oops!`, code: -1 } as ExecFileException,
       stdout: ``,
