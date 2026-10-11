@@ -46,7 +46,7 @@
     "prepare": "husky"
   },
   "dependencies": {
-    "@jestaubach/fs-helpers": "^0.2.31"
+    "@jestaubach/fs-helpers": "^0.2.32"
   },
   "devDependencies": {
     "@commitlint/cli": "^21.2.3",
