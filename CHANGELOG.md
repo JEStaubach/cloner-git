@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.4](https://github.com/JEStaubach/cloner-git/compare/cloner-git-v0.2.2...cloner-git-v0.2.4) (2026-10-12)
+
+
+### Bug Fixes
+
+* **coderabbit:** bump pkg version ([#54](https://github.com/JEStaubach/cloner-git/issues/54)) ([b61ce3a](https://github.com/JEStaubach/cloner-git/commit/b61ce3a3944b699dace190252ba39dcd54aa303c))
+
 ## [0.2.2](https://github.com/JEStaubach/cloner-git/compare/cloner-git-v0.2.1...cloner-git-v0.2.2) (2026-10-11)
 
 
