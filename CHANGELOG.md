@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.5](https://github.com/JEStaubach/cloner-git/compare/cloner-git-v0.2.4...cloner-git-v0.2.5) (2026-10-14)
+
+
+### Continuous Integration
+
+* **release-please:** auto merge ([#58](https://github.com/JEStaubach/cloner-git/issues/58)) ([cd694e5](https://github.com/JEStaubach/cloner-git/commit/cd694e5e2c836192c00be0b8994d3daadcdeabdd))
+
 ## [0.2.4](https://github.com/JEStaubach/cloner-git/compare/cloner-git-v0.2.2...cloner-git-v0.2.4) (2026-10-12)
 
 
